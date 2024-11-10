@@ -12,6 +12,7 @@ Flask (Python) handles user data, manages points, and tracks progress.
 SQLite for storing user emails, and coming soon profiles/achievements
 ## APIs: 
 OpenAI API for an interactive support chatbot
+##
 Put your own API key in the .env to run
 ## Notes:
 Download the WhatIsCriticalThinking.mp4 and place it in the PATH frontend/public/videos/
