@@ -1,3 +1,4 @@
+// src/components/QuizPage.js
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './QuizPage.css';
@@ -6,7 +7,6 @@ function QuizPage({ onQuizComplete }) {
   const { topic } = useParams();
   const navigate = useNavigate();
   
-  // Questions for each topic
   const questions = {
     "critical-thinking": [
       {
@@ -55,28 +55,27 @@ function QuizPage({ onQuizComplete }) {
   };
 
   const topicQuestions = questions[topic] || [];
-  
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [score, setScore] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState("");
   const [showScore, setShowScore] = useState(false);
 
-  // Handle answer selection
   const handleAnswerSelect = (option) => setSelectedAnswer(option);
 
-  // Handle next question logic
   const handleNextQuestion = () => {
     if (selectedAnswer === topicQuestions[currentQuestion].correctAnswer) {
-      setScore(score + 1); // Increase score if correct answer
+      setScore(score + 1);
     }
     
-    setSelectedAnswer(""); // Clear selection for next question
+    setSelectedAnswer("");
 
     if (currentQuestion + 1 < topicQuestions.length) {
-      setCurrentQuestion(currentQuestion + 1); // Move to next question
+      setCurrentQuestion(currentQuestion + 1);
     } else {
-      setShowScore(true); // Show score if quiz is completed
-      if (onQuizComplete) onQuizComplete(); // Trigger onQuizComplete for additional points
+      setShowScore(true);
+      if (onQuizComplete && score + 1 === topicQuestions.length) {
+        onQuizComplete(topic);
+      }
     }
   };
 
