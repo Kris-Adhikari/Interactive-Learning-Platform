@@ -1,5 +1,6 @@
 # ImproWise
 An Interactive Learning App for Teens
+Project for Hack The Change 2024
 This interactive learning app is built for teens to learn essential "adulting" skills in a fun, hands-on way. Users earn points by completing activities, quizzes, and challenges, which they can redeem for rewards like mini-games, gift cards, and other exciting prizes. The app makes education accessible and motivating for users of all ages, ensuring that learning these life skills is both enjoyable and rewarding.
 
 Tech Stack:
