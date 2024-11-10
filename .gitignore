@@ -1,0 +1,11 @@
+# Environment variables
+.env
+
+# Python cache
+__pycache__/
+
+# SQLite database files
+database.db
+
+# Node.js dependencies
+node_modules/
