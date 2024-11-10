@@ -1,0 +1,50 @@
+
+.sidebar {
+    width: 200px;
+    padding: 20px;
+    background-color: #343a40;
+    color: white;
+  }
+  .lessons-label {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin: 10px 0;
+    text-align: center;
+    color: #FFFFFF; 
+  }
+      
+  
+  .sidebar ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .sidebar li {
+    margin-bottom: 15px;
+  }
+  
+  .topic-button, .quiz-button {
+    display: block;
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+    border-radius: 4px;
+  }
+  
+  .topic-button {
+    background-color: #007bff;
+  }
+  
+  .topic-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .quiz-button {
+    background-color: #28a745;
+    margin-top: 5px;
+  }
+  
+  .quiz-button:hover {
+    background-color: #1e7e34;
+  }
+  
