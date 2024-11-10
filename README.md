@@ -6,7 +6,7 @@
 ## Tech Stack: 
 ## Frontend: React.js for an interactive and responsive user interface. 
 ## Backend: Flask (Python) handles user data, manages points, and tracks progress. 
-## Database: SQLite for storing user emails, profiles, points, and achievements. 
+## Database: SQLite for storing user emails, and coming soon profiles/achievements
 ## APIs: OpenAI API for an interactive support chatbot 
 
 
