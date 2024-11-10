@@ -1,0 +1,47 @@
+
+.home-page {
+    padding: 20px;
+  }
+  
+  .progress-container {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  
+  .page-title {
+    font-size: 2em;
+    margin-bottom: 10px;
+  }
+  
+  .subtitle {
+    font-size: 1.2em;
+    color: #555;
+    margin-bottom: 20px;
+  }
+  
+  .progress-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .progress-item {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 15px 0;
+    width: 100%;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .topic-title {
+    font-size: 1.5em;
+    margin-bottom: 5px;
+  }
+  
+  .completed {
+    color: green;
+    font-weight: bold;
+  }
+  
