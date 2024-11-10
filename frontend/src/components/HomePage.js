@@ -1,3 +1,4 @@
+// src/components/HomePage.js
 import React, { useEffect, useState } from 'react';
 import './HomePage.css';
 
@@ -8,18 +9,13 @@ function HomePage() {
   });
 
   useEffect(() => {
-    // Clear any existing `userProgress` data from localStorage temporarily
-    localStorage.removeItem('userProgress');
-
-    // Load saved progress from localStorage if it exists, or initialize default progress
+    // Load saved progress from localStorage
     const savedProgress = JSON.parse(localStorage.getItem('userProgress')) || {
       "critical-thinking": { quizCompleted: false },
       "networking-marginalized": { quizCompleted: false }
     };
 
     setProgress(savedProgress);
-    // Save default progress structure to localStorage if it was empty
-    localStorage.setItem('userProgress', JSON.stringify(savedProgress));
   }, []);
 
   return (
@@ -30,7 +26,9 @@ function HomePage() {
         <div className="progress-section">
           {Object.entries(progress).map(([topic, status]) => (
             <div key={topic} className="progress-item">
-              <h2 className="topic-title">{topic === "critical-thinking" ? "Critical Thinking" : "Networking While Being Marginalized"}</h2>
+              <h2 className="topic-title">
+                {topic === "critical-thinking" ? "Critical Thinking" : "Networking While Being Marginalized"}
+              </h2>
               <p className={status.quizCompleted ? "completed" : ""}>
                 Quiz Completed: {status.quizCompleted ? "✅" : "❌"}
               </p>
