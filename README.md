@@ -7,7 +7,7 @@ This interactive learning app is built for teens to learn essential "adulting" s
 ## Frontend: 
 - React.js for an interactive and responsive user interface. 
 ## Backend: 
-- Flask (Python) handles user data, manages points, and tracks progress. 
+- Flask (Python) handles backend functionality with the chatbot
 ## Database: 
 - SQLite for storing user emails, and coming soon profiles/achievements
 ## APIs: 
