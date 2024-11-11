@@ -9,11 +9,10 @@ function EmailCapture({ onEmailSubmit }) {
     e.preventDefault();
     try {
       await axios.post('/api/save_email', { email });
-      onEmailSubmit(email); // Notify parent component that email is saved
+      onEmailSubmit(email); 
     } catch (error) {
-      console.error('Error saving email:', error); // Log any error in the console without user notification
+      console.error('Error saving email:', error); 
     } finally {
-      // Always show "Email saved" popup
       alert('Email saved');
     }
   };
