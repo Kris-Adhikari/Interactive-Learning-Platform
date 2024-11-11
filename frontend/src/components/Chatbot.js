@@ -1,4 +1,3 @@
-// src/components/Chatbot.js
 import React, { useState } from 'react';
 import axios from 'axios';
 import './Chatbot.css';
