@@ -13,21 +13,16 @@ app.secret_key = os.urandom(24)
 CORS(app)
 
 def init_db():
-    try:
-        conn = sqlite3.connect('database.db')
-        cursor = conn.cursor()
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS users (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                email TEXT UNIQUE
-            )
-        ''')
-        conn.commit()
-        print("Database initialized successfully")
-    except Exception as e:
-        print(f"Error initializing database: {e}")
-    finally:
-        conn.close()
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            email TEXT UNIQUE
+        )
+    ''')
+    conn.commit()
+    conn.close()
 
 init_db()
 
@@ -36,37 +31,35 @@ def chatbot_response():
     data = request.json
     user_question = data.get("question", "")
 
-    try:
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": "You are a helpful assistant."},
-                {"role": "user", "content": user_question}
-            ]
-        )
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": user_question}
+        ]
+    )
+    
+    if "choices" in response and response.choices:
         answer = response.choices[0].message['content'].strip()
         return jsonify({"answer": answer})
-    except Exception as e:
-        print(f"Error calling OpenAI API: {e}")
-        return jsonify({"error": str(e)}), 500
+    else:
+        return jsonify({"error": "Failed to retrieve answer"}), 500
 
 @app.route('/api/save_email', methods=['POST'])
 def save_email():
     data = request.json
     email = data.get('email', '')  
     
-    try:
-        conn = sqlite3.connect('database.db')
-        cursor = conn.cursor()
-        cursor.execute("INSERT OR IGNORE INTO users (email) VALUES (?)", (email,))
-        conn.commit()
-        conn.close()
-
-        print("Email saved to database:", email)
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+    cursor.execute("INSERT OR IGNORE INTO users (email) VALUES (?)", (email,))
+    conn.commit()
+    conn.close()
+    
+    if cursor.rowcount > 0:
         return jsonify({"message": "Email saved successfully!"}), 200
-    except Exception as e:
-        print(f"Database error: {e}")
-        return jsonify({"error": "Failed to save email."}), 500
+    else:
+        return jsonify({"error": "Email already exists or failed to save."}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
