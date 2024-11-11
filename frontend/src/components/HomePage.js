@@ -1,4 +1,3 @@
-// src/components/HomePage.js
 import React, { useEffect, useState } from 'react';
 import './HomePage.css';
 
@@ -9,7 +8,6 @@ function HomePage() {
   });
 
   useEffect(() => {
-    // Load saved progress from localStorage
     const savedProgress = JSON.parse(localStorage.getItem('userProgress')) || {
       "critical-thinking": { quizCompleted: false },
       "networking-marginalized": { quizCompleted: false }
@@ -30,7 +28,7 @@ function HomePage() {
                 {topic === "critical-thinking" ? "Critical Thinking" : "Networking While Being Marginalized"}
               </h2>
               <p className={status.quizCompleted ? "completed" : ""}>
-                Quiz Completed: {status.quizCompleted ? "✅" : "❌"}
+                Quiz Completed: {status.quizCompleted ? "\u2705" : "\u274C"}
               </p>
             </div>
           ))}
