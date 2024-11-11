@@ -4,27 +4,21 @@ import './Chatbot.css';
 
 function Chatbot() {
   const [question, setQuestion] = useState("");
-  const [chatHistory, setChatHistory] = useState([]);
-  const [isOpen, setIsOpen] = useState(false); // For minimize/maximize functionality
+  const [answer, setAnswer] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleSend = async () => {
     if (!question) return;
 
-    // add user question to chat history
-    const updatedChatHistory = [...chatHistory, { sender: "user", text: question }];
-    setChatHistory(updatedChatHistory);
-    setQuestion(""); // clear input field
+    setQuestion("");
 
-    try {
-      // send question to the Flask backend
-      const response = await axios.post("http://localhost:5000/api/chatbot", { question });
-      const answer = response.data.answer;
+    const response = await axios.post("http://localhost:5000/api/chatbot", { question }).catch(() => {
+      setAnswer("Sorry, something went wrong. Please try again later.");
+      return null;
+    });
 
-      
-      setChatHistory([...updatedChatHistory, { sender: "bot", text: answer }]);
-    } catch (error) {
-      console.error("Error fetching chatbot response:", error);
-      setChatHistory([...updatedChatHistory, { sender: "bot", text: "Sorry, something went wrong. Please try again later." }]);
+    if (response && response.data.answer) {
+      setAnswer(response.data.answer);
     }
   };
 
@@ -35,12 +29,8 @@ function Chatbot() {
       </button>
       {isOpen && (
         <div className="chat-content">
-          <div className="chat-history">
-            {chatHistory.map((chat, index) => (
-              <div key={index} className={`chat-bubble ${chat.sender}`}>
-                {chat.text}
-              </div>
-            ))}
+          <div className="chat-answer">
+            {answer && <div className="chat-bubble bot">{answer}</div>}
           </div>
           <div className="chat-input">
             <input
