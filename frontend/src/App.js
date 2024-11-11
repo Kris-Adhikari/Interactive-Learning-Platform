@@ -25,7 +25,7 @@ function App() {
   }, []);
 
   const handleQuizCompletion = (topic) => {
-    setPoints(points + 10); // Increase points by 10 for each completed quiz
+    setPoints(points + 10); 
     markQuizAsCompleted(topic);
   };
 
