@@ -9,13 +9,11 @@ function VideoPlayer({ videoUrl, currentTopic }) {
 
     const handleTimeUpdate = () => {
       if (video && video.currentTime >= video.duration - 2) {
-        // Mark video as completed
         console.log("Video detected as completed");
         const progress = JSON.parse(localStorage.getItem('userProgress')) || {};
         progress[currentTopic] = { ...progress[currentTopic], videoWatched: true };
         localStorage.setItem('userProgress', JSON.stringify(progress));
         
-        // Remove the listener after completion to prevent multiple updates
         video.removeEventListener('timeupdate', handleTimeUpdate);
       }
     };
@@ -24,7 +22,6 @@ function VideoPlayer({ videoUrl, currentTopic }) {
       video.addEventListener('timeupdate', handleTimeUpdate);
     }
 
-    // Cleanup event listener on component unmount
     return () => {
       if (video) {
         video.removeEventListener('timeupdate', handleTimeUpdate);
