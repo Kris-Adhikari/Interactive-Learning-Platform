@@ -9,7 +9,7 @@ load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 app = Flask(__name__)
-app.secret_key = os.urandom(24)  # Needed for session handling
+app.secret_key = os.urandom(24)  
 CORS(app)
 
 def init_db():
