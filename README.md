@@ -9,7 +9,7 @@ This interactive learning app is built for teens to learn essential "adulting" s
 ## Backend: 
 - Flask (Python) handles backend functionality with the chatbot
 ## Database: 
-- SQLite for storing user emails, and coming soon profiles/achievements
+- PostgreSQL for storing user emails, and coming soon profiles/achievements
 ## APIs: 
 - OpenAI API for an interactive support chatbot
 - Put your own API key in the .env to run
