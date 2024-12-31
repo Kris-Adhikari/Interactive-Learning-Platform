@@ -1,65 +1,72 @@
 import os
 import openai
-import sqlite3
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from dotenv import load_dotenv
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.exc import IntegrityError
 
-load_dotenv()  
-openai.api_key = os.getenv("OPENAI_API_KEY")
+load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = os.urandom(24)  
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', os.urandom(24))
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv(
+    'DATABASE_URL',
+    'postgresql://username:password@localhost:5432/your_db'
+)
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db = SQLAlchemy(app)
 CORS(app)
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
-def init_db():
-    conn = sqlite3.connect('database.db')
-    cursor = conn.cursor()
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            email TEXT UNIQUE
-        )
-    ''')
-    conn.commit()
-    conn.close()
+class User(db.Model):
+    __tablename__ = 'users'
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(120), unique=True, nullable=False)
 
-init_db()
+@app.before_first_request
+def create_tables():
+    db.create_all()
 
 @app.route('/api/chatbot', methods=['POST'])
 def chatbot_response():
-    data = request.json
-    user_question = data.get("question", "")
-
+    data = request.get_json()
+    user_question = data.get("question", "").strip()
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=[
-            {"role": "system", "content": "You are a helpful assistant."},
             {"role": "user", "content": user_question}
         ]
     )
-    
-    if "choices" in response and response.choices:
+    if response and response.choices:
         answer = response.choices[0].message['content'].strip()
-        return jsonify({"answer": answer})
-    else:
-        return jsonify({"error": "Failed to retrieve answer"}), 500
+        return jsonify({"answer": answer}), 200
+    return jsonify({"error": "Failed to retrieve answer from OpenAI."}), 500
 
 @app.route('/api/save_email', methods=['POST'])
 def save_email():
-    data = request.json
-    email = data.get('email', '')  
-    
-    conn = sqlite3.connect('database.db')
-    cursor = conn.cursor()
-    cursor.execute("INSERT OR IGNORE INTO users (email) VALUES (?)", (email,))
-    conn.commit()
-    conn.close()
-    
-    if cursor.rowcount > 0:
-        return jsonify({"message": "Email saved successfully!"}), 200
-    else:
-        return jsonify({"error": "Email already exists or failed to save."}), 500
+    data = request.get_json()
+    email = data.get('email', '').strip()
+    new_user = User(email=email)
+    try:
+        db.session.add(new_user)
+        db.session.commit()
+        return jsonify({"message": "Email saved successfully!"}), 201
+    except IntegrityError:
+        db.session.rollback()
+        return jsonify({"error": "Email already exists."}), 409
+    except:
+        db.session.rollback()
+        return jsonify({"error": "Failed to save email."}), 500
+
+@app.errorhandler(404)
+def handle_not_found(e):
+    return jsonify({"error": "Resource not found."}), 404
+
+@app.errorhandler(500)
+def handle_internal_error(e):
+    return jsonify({"error": "Internal server error."}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
