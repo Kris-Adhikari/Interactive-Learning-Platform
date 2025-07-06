@@ -25,9 +25,13 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), unique=True, nullable=False)
 
-@app.before_first_request
-def create_tables():
-    db.create_all()
+# Initialize database tables
+with app.app_context():
+    try:
+        db.create_all()
+        print("Database tables created successfully")
+    except Exception as e:
+        print(f"Error creating database tables: {e}")
 
 @app.route('/api/chatbot', methods=['POST'])
 def chatbot_response():
